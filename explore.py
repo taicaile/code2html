@@ -1,11 +1,11 @@
 """This script is used to generate online source code html pages"""
-import json
-import os
-import sys
-import shutil
 import logging
+import os
+import shutil
+import sys
 from pathlib import Path
 
+import bs4
 import pygments
 from pygments.formatters.html import HtmlFormatter
 from pygments.lexers import get_lexer_for_filename
@@ -25,7 +25,7 @@ for f in FILES_DIR.rglob("*.*"):
         continue
     files.add(f.__str__())
 
-logger.info(f"found {len(files)} files.")
+logger.info("found %s files.", len(files))
 
 HTMLS_DIR = "html"
 if os.path.exists(HTMLS_DIR):
@@ -84,7 +84,6 @@ for f in tqdm(sorted(files)):
 
 logger.info("Prepare to format %d/%d files", len(index), len(files))
 
-import bs4
 
 # load the file
 with open("index.html", "r", encoding="utf-8") as file:
@@ -97,5 +96,5 @@ for file in sorted(files):
     li.append(a)
     soup.ul.append(li)
 # save the file again
-with open(f"{HTMLS_DIR}/index.html", "w") as outf:
+with open(f"{HTMLS_DIR}/index.html", "w", encoding="utf-8") as outf:
     outf.write(str(soup.prettify()))
